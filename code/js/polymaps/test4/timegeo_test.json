@@ -1,0 +1,41 @@
+{
+    "type": "GeometryCollection",
+    "geometries": [
+        {
+            "type": "Point",
+            "ts": 0,
+            "url": "http://nytimes.com/",
+            "coordinates": [
+                -74.9047,
+                39.948
+            ]
+        },
+        {
+            "type": "Point",
+            "ts": 12,
+	    "url": "http://maps.stamen.com/#watercolor/12/37.9002/-122.5626",
+            "coordinates": [
+                0,
+                0
+            ]
+        },
+        {
+            "type": "Point",
+            "ts": 24,
+	    "url": "http://mbostock.github.com/d3/ex/",
+            "coordinates": [
+                -73.9846,
+                40.7488
+            ]
+        },
+        {
+            "type": "Point",
+            "ts": 35,
+	    "url": "http://www.supertopo.com/tr/Hospital-Break-Out-V-5-12-R-A2/t11379n.html?utm-source=SuperTopo+purchasers+and+forum+up+to+3.22.11&utm-campaign=0e0efecbce-SuperTopo-Climbing-News-May-26-20114-5-2011&utm-medium=email",
+            "coordinates": [
+                -70.7757,
+                43.0711
+            ]
+        }
+    ]
+}

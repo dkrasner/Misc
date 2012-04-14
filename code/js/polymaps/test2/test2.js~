@@ -1,0 +1,14 @@
+var po = org.polymaps;
+
+var map = po.map()
+    .container(document.getElementById("map").appendChild(po.svg("svg")))
+    .center({lat: 40.773, lon: -73.98})
+    .zoomRange([10,13])
+    .zoom(10)
+    .add(po.interact());
+
+map.add(po.image()
+	.url(po.url("http://{S}tile.cloudmade.com"
+		    + "/3110d8462f7446cfb0900015a5cb3daf" // http://cloudmade.com/register
+		    + "/44094/256/{Z}/{X}/{Y}.png")
+	     .hosts(["a.", "b.", "c.", ""])));

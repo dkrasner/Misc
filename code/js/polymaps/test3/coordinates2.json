@@ -1,0 +1,10 @@
+{ "type": "GeometryCollection",
+  "geometries": [
+    { "type": "Point",
+      "coordinates": [-74.007, 40.7403]
+      },
+    { "type": "Point",
+      "coordinates": [-121.922, 36.6167]
+      }
+  ]
+}
