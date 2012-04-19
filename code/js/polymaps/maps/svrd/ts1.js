@@ -36,7 +36,7 @@ map.add(po.geoJson()
 
 
 map.add(po.geoJson()
-	.url("timegeo.json")
+	.url("timegeo_1074.json")
 	.on("load", point_load));
 
 
@@ -53,7 +53,7 @@ function world_load(e) {
 
   for (var i = 0; i < e.features.length; i++) {
     var feature = e.features[i],  d = feature.data.properties.q;
-    console.log(quantile(d))
+   // console.log(quantile(d))
     feature.element
         .setAttribute("class", "q" + quantile(d) + "-" + 9)
     feature.element.appendChild(po.svg("title").appendChild(
@@ -74,7 +74,7 @@ function state_load(e) {
  
   for (var i = 0; i < e.features.length; i++) {
     var feature = e.features[i], d = feature.data.properties.q;
-    console.log(quantile(d))
+   // console.log(quantile(d))
     if (d == undefined) {
       feature.element.setAttribute("display", "none");
     } else {
@@ -98,6 +98,11 @@ function point_load(e) {
     while (g.lastChild) g.removeChild(g.lastChild);
     var L = e.features[0].data.geometry.geometries.length	
     //console.log(e.features[0].data.geometry.geometries.length)
+    
+    // get the start time of the log	  
+    var start = e.features[0].data.geometry.geometries[0].ts
+    console.log(start)	
+
     for (var i = 0; i < e.features[0].data.geometry.geometries.length; i++) {		
 		var pt = e.features[0].data.geometry.geometries
 		var url = pt[i].url
@@ -127,7 +132,7 @@ function point_load(e) {
 	}
 	for (k=1; k < L; k++ ){
 		//console.log(pt[k].ts)
-		pl(k, pt[k].ts*10)
+		pl(k, 10*(pt[k].ts - start))
 	}
 }
 
