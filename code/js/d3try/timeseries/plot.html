@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Time Series</title>
+ <!-- Google +1 -->
+  <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+  <!-- Google Web Fonts: http://www.google.com/webfonts/v2#AboutPlace:about-->
+  <link href='http://fonts.googleapis.com/css?family=Kameron|Lora|Quattrocento&v2' rel='stylesheet' type='text/css'>
+    
+    <script type="text/javascript" src="d3.js"></script>
+    <script type="text/javascript" src="d3.layout.js"></script>
+    <script type="text/javascript" src="d3.csv.js"></script>
+    <link type="text/css" rel="stylesheet" href="verisi_georgia.css"/>
+     <style type="text/css">
+       svg {
+         shape-rendering: crispEdges;
+        }
+       #stackedbudget-chart line {
+         stroke: #000;
+       }
+       .rule line {
+         stroke: #eee;
+       }
+       #histogram-trellis-chart rect {
+          fill: darkblue;
+          stroke: white;
+       }
+       #histogram-trellis-chart line {
+          stroke: black;
+       }
+
+       #treemap-transition .cell {
+         border: solid 1px white;
+         font: 16px;
+         color:white;
+         line-height: 12px;
+         overflow: hidden;
+         position: absolute;
+         text-indent: 2px;
+         text-align: center;
+         vertical-align: middle;
+      }
+
+       table { 
+         border-collapse: collapse;
+         border: 2px solid #FFFAFA; 
+       }
+       td {
+         padding: 10px; 
+       }
+  </style>
+
+    <!-- Commify a number: http://www.mredkj.com/javascript/nfbasic.html  -->
+    <script type="text/javascript">
+    function addCommas(nStr)
+    {
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	return x1 + x2;
+    }
+    </script>
+
+  <!-- Google Analytics -->
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24214166-1']);
+        _gaq.push(['_setDomainName', 'verisi.com']);
+        _gaq.push(['_trackPageview']);
+        _gaq.push(['_trackPageLoadTime']);
+
+      (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+     })();
+
+  </script>
+
+</head> 
+
+  </head>
+  <body>
+    <div id="chart"></div>
+    <script type="text/javascript" src="timeseries.js"></script>	
+  </body>
+</html>

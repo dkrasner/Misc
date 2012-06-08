@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hierarchical  Chart</title>
+    <script type="text/javascript" src="d3.js"></script>
+    <script type="text/javascript" src="d3.layout.js"></script>
+    <script type="text/javascript" src="d3.time.js"></script>
+
+    <style type="text/css">
+
+
+path {
+      stroke-width: 2.5;
+    fill: none;
+}
+
+
+line {
+    stroke: black;
+}
+ 
+text {
+    font-family: Arial;
+    font-size: 9pt;
+}    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+
+
+//////some auxilliary functions///////
+
+function get_type(thing){
+    if(thing===null)return "[object Null]"; // special case
+    return Object.prototype.toString.call(thing);
+}
+
+///takes a unix timestamp and returns a year + month label
+
+function date_label(D){
+    var d = new Date(D)
+    
+    return d.getFullYear() + "-" + String(Number(d.getMonth()) + 1)
+
+}
+
+//var D = new  Date(1325395872000)
+//console.log(D.toDateString().substring(4,7) + " " + D.toDateString().substring(11,15))
+
+
+///plot params, scale 
+w = 650,
+h = 300,
+margin = 25
+
+
+
+////hang an svg element on body
+var vis = d3.select("body")
+    .append("svg:svg")
+    .attr("width", w)
+    .attr("height", h)
+
+
+var g = vis.append("svg:g")
+    .attr("transform", "translate(0, 300)");
+
+
+////make lines to connect points
+var line = d3.svg.line()
+    .x(function(d,i) { return x(i); })
+    .y(function(d) { return -1 * y(d); })
+
+
+
+d3.json(
+  'cohort2.json',
+  function (jsondata) {
+
+  
+    // create the chart here with
+    // the returned data
+
+    //console.log(jsondata);
+
+   var keys = d3.keys(jsondata)
+  
+   var cohort1 = d3.values(jsondata[keys[0]])
+   var cohort2 = d3.values(jsondata[keys[1]])
+
+   var cohort1_pv = []
+   var cohort2_pv = []
+  
+        
+   for(i = 0; i < cohort1.length; i++){
+       cohort1_pv[i] = d3.values(cohort1[i])[0].pv
+      
+   }
+
+   for(i = 0; i < cohort2.length; i++){
+       cohort2_pv[i] = d3.values(cohort2[i])[0].pv
+      
+   }
+
+      
+ 
+   
+    
+   y = d3.scale.linear().domain([0, d3.max(cohort1_pv.concat(cohort2_pv))]).range([0 + margin, h- margin]),
+   x = d3.scale.linear().domain([0, cohort1_pv.length-1]).range([0 + margin, w-50 - margin])
+
+   ///// draw the line graph
+   g.append("svg:path").attr("d", line(cohort1_pv)).attr("stroke", "steelblue").append("svg:title")
+   .text(date_label(Number(keys[0])));
+   g.append("svg:path").attr("d", line(cohort2_pv)).attr("stroke", "red").append("svg:title")
+   .text(date_label(Number(keys[1])));
+
+   //// draw the dots on the graph
+   g.selectAll('dots')
+    .data(cohort1_pv).enter()
+    .append('svg:circle')
+    .attr('cx', function (d,i) { return x(i); })
+    .attr('cy', function (d) { return -1*y(d); })
+    .attr('r', 5)
+    .attr('fill', 'steelblue')
+    .append("svg:title")
+    .text(function(d) { return d; });
+
+    g.selectAll('dots')
+    .data(cohort2_pv).enter()
+    .append('svg:circle')
+    .attr('cx', function (d,i) { return x(i); })
+    .attr('cy', function (d) { return -1*y(d); })
+    .attr('r', 5)
+    .attr('fill', 'red')
+    .append("svg:title")
+    .text(function(d) { return d; });
+
+
+//draw the axes
+   g.append("svg:line")
+    .attr("x1", x(0))
+    .attr("y1", -1 * y(0))
+    .attr("x2", x(w-50))
+    .attr("y2", -1 * y(0))
+ 
+
+   g.append("svg:line")
+    .attr("x1", x(0))
+    .attr("y1", -1 * y(0))
+    .attr("x2", x(0))
+    .attr("y2", -1 * y(d3.max(cohort1_pv.concat(cohort2_pv))))
+
+
+
+///labels and ticks
+   g.selectAll(".xLabel")
+    .data(x.ticks(5))
+    .enter().append("svg:text")
+    .attr("class", "xLabel")
+    .text(String)
+    .attr("x", function(d) { return x(d) })
+    .attr("y", 0)
+    .attr("text-anchor", "middle")
+    .text(function(i) {return i+1})
+
+  g.selectAll(".yLabel")
+    .data(y.ticks(4))
+    .enter().append("svg:text")
+    .attr("class", "yLabel")
+    .text(String)
+    .attr("x", 0)
+    .attr("y", function(d) { return -1 * y(d) })
+    .attr("text-anchor", "right")
+    .attr("dy", 4)
+
+  g.selectAll(".xTicks")
+    .data(x.ticks(5))
+    .enter().append("svg:line")
+    .attr("class", "xTicks")
+    .attr("x1", function(d) { return x(d); })
+    .attr("y1", -1 * y(0))
+    .attr("x2", function(d) { return x(d); })
+    .attr("y2", -1 * y(-0.3))
+ 
+  g.selectAll(".yTicks")
+    .data(y.ticks(4))
+    .enter().append("svg:line")
+    .attr("class", "yTicks")
+    .attr("y1", function(d) { return -1 * y(d); })
+    .attr("x1", x(-.05))
+    .attr("y2", function(d) { return -1 * y(d); })
+    .attr("x2", x(.05))
+
+////Legend
+  g.append("svg:rect")
+   .attr("fill", 'steelblue' )
+   .attr("x", x(cohort1_pv.length-.9))
+   .attr("y", -1*y(10))
+   .attr("width", 15)
+   .attr("height", 15);
+
+  g.append("svg:text")
+   .attr("x", x(cohort1_pv.length-.71	) )
+   .attr("y", -1*y(10-.48))
+   .text(date_label(Number(keys[0])));
+
+  g.append("svg:rect")
+   .attr("fill", 'red' )
+   .attr("x", x(cohort1_pv.length-.9))
+   .attr("y", -1*y(9))
+   .attr("width", 15)
+   .attr("height", 15);
+
+  g.append("svg:text")
+   .attr("x", x(cohort1_pv.length-.71	) )
+   .attr("y", -1*y(9-.48))
+   .text(date_label(1325395872000));
+
+
+  });
+
+
+
+////make a line for every subsequent pair of points, connecting them
+//g.append("svg:path").attr("d", line(data)).attr("stroke", "blue");
+
+///draw another line
+//g.append("svg:path").attr("d", line(data2)).attr("stroke", "green");
+
+
+
+ 
+
+    </script>
+  </body>
+</html>
+
+
+
+
+
+

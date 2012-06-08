@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hierarchical Bar Chart</title>
+    <script type="text/javascript" src="d3.js"></script>
+    <script type="text/javascript" src="d3.layout.js"></script>
+    <style type="text/css">
+
+text {
+  font: 15px sans-serif;
+}
+
+rect.background {
+  fill: white;
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+
+
+// the data
+var data = [ 24, 8, 12, 1, 20]
+
+
+var barWidth = 60;
+var width = (barWidth + 10) * data.length;
+//var width = 1000;
+var height = 400;
+
+var x = d3.scale.linear().domain([0, data.length]).range([0, width]);
+var y = d3.scale.linear().domain([0, d3.max(data, function(d) { return d; })]).
+  rangeRound([0, height]);
+
+
+// We append a 600x300 empty SVG container in the div
+var chart = d3.select('body').append("svg").attr("width", width).attr("height", height);
+
+
+// Create the bar chart which consists of ten SVG rectangles, one for each piece of data
+var rects = chart.selectAll('rect').data(data)
+                 .enter().append('rect')
+                 .attr("stroke", "none").attr("fill", "rgb(7, 130, 180)")
+                 .attr("x", function(d, index) { return x(index); })
+                 .attr("y", function(d) { return height - y(d); })
+                 .attr("width", barWidth)
+                 .attr("height", function(d) { return y(d); });
+
+
+chart.selectAll("text").
+  data(data).
+  enter().
+  append("svg:text").
+  attr("x", function(datum, index) { return x(index) + barWidth; }).
+  attr("y", function(datum) { return height - y(datum); }).
+  attr("dx", -barWidth/2).
+  attr("dy", "1.2em").
+  attr("text-anchor", "middle").
+  text(function(datum) { return datum;}).
+  attr("fill", "white");
+
+// Transition on click managed by jQuery
+rects.on('click', function() {
+
+   chart.selectAll("text").remove()
+   chart.selectAll('rect').remove()
+  // Generate randomly a data set with 10 elements
+  //var newData = [10, 23, 43,12, 14];
+  var newData = []
+  b = Math.floor(Math.random()*10)
+  //console.log(b)
+  //b = 5
+  for (var i=0; i<b; i+=1) { newData.push(Math.floor(24 * Math.random())); }
+  //console.log(newData)
+ 
+  
+
+  // Generate a random color
+  var newColor = 'rgb(' + Math.floor(255 * Math.random()) +
+                   ', ' + Math.floor(255 * Math.random()) +
+                   ', ' + Math.floor(255 * Math.random()) + ')';
+
+
+
+  var y_new = d3.scale.linear().domain([0, d3.max(newData, function(d) { return d; })]).
+  rangeRound([0, height]);
+  var x_new = d3.scale.linear().domain([0, newData.length]).range([0, width]);
+
+  var barWidth = Math.min(width/b - 10, 60)
+
+  chart.selectAll('rect').data(newData).enter().append('rect')  
+       .transition().duration(2000).delay(200)
+       .attr("width", barWidth)
+	.attr("stroke", "none").attr("fill", "rgb(7, 130, 180)")
+       .attr("x", function(d, index) { return x(index); })
+       .attr("y", function(d) { return height - y_new(d); })
+       .attr("height", function(d) { return y_new(d); })
+       .attr("fill", newColor);
+
+   chart.selectAll("text").
+   data(newData).
+  enter().
+  append("svg:text").
+  attr("x", function(datum, index) { return x_new(index) + barWidth; }).
+  attr("y", function(datum) { return height - y_new(datum); }).
+  attr("dx", -barWidth/2).
+  attr("dy", "1.2em").
+  attr("text-anchor", "middle").
+  text(function(datum) { return datum;}).
+  attr("fill", "white");
+
+
+
+
+});
+
+
+
+
+    </script>
+  </body>
+</html>
